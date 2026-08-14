@@ -57,10 +57,54 @@ class OciClient(
         .readTimeout(30, TimeUnit.SECONDS)
         .build()
 
-    private val authInterceptor = AuthInterceptor(tokenCache)
+    // 认证拦截器(惰性初始化,避免循环):在 401 时自动查 authProvider 并重试
+    private val _authInterceptor: AuthInterceptor by lazy { AuthInterceptor(tokenCache) }
+
+    // 认证拦截器:在首次 401 时自动从 authProvider 查凭据并重试(Basic/Bearer)
+    // 后续请求若缓存命中则直接带 token,不查 authProvider
+    private inner class AuthInterceptor(private val tokenCache: TokenCache) : Interceptor {
+        override fun intercept(chain: Interceptor.Chain): Response {
+            val request = chain.request()
+            val key = request.url.host
+            // 优先用缓存的 Bearer token
+            val cached = tokenCache.get(key)
+            val first = if (cached != null) {
+                request.newBuilder().header("Authorization", "Bearer $cached").build()
+            } else {
+                request
+            }
+            val response = chain.proceed(first)
+            if (response.code != 401) return response
+            response.close()
+            val challenge = response.header("WWW-Authenticate") ?: return response
+            if (!challenge.startsWith("Bearer")) {
+                // Basic challenge:从 authProvider 查凭据重试
+                val cred = authProviderCredential(request.url.host)
+                if (cred != null) {
+                    return chain.proceed(request.newBuilder().header("Authorization", basicAuth(cred)).build())
+                }
+                return response
+            }
+            // Bearer challenge:用 authProvider 的凭据换 token
+            val cred = authProviderCredential(request.url.host)
+            val token = fetchToken(challenge, cred) ?: return response
+            tokenCache.put(key, token, null)
+            return chain.proceed(request.newBuilder().header("Authorization", "Bearer $token").build())
+        }
+    }
+
+    /** 查询 authProvider(同步版,供拦截器在 IO 线程调用)。 */
+    private fun authProviderCredential(registryHost: String): Credential? {
+        // authProvider 是 suspend,但拦截器运行在 OkHttp 线程池(IO),同步查一次
+        return runCatching {
+            kotlinx.coroutines.runBlocking {
+                authProvider.credential(registryHost)
+            }
+        }.getOrNull()
+    }
 
     // 认证拦截器挂到调用方 client 上(保持外部拦截器顺序,认证兜底)
-    private val client: OkHttpClient = client.newBuilder().addInterceptor(authInterceptor).build()
+    private val client: OkHttpClient = client.newBuilder().addInterceptor(_authInterceptor).build()
 
     /** push:monolithic blob 上传 → manifest PUT(带 tag)。流式,内存 O(1)。 */
     suspend fun push(
@@ -463,35 +507,6 @@ class OciClient(
                     onProgress?.invoke(sent)
                 }
             }
-        }
-    }
-
-    /** 401 → Bearer token 流程(单次重试)。凭据经 Request tag 传入。 */
-    private inner class AuthInterceptor(private val tokenCache: TokenCache) : Interceptor {
-        override fun intercept(chain: Interceptor.Chain): Response {
-            val request = chain.request()
-            val key = request.url.host
-            val cached = tokenCache.get(key)
-            val first = if (cached != null) {
-                request.newBuilder().header("Authorization", "Bearer $cached").build()
-            } else {
-                request
-            }
-            val response = chain.proceed(first)
-            if (response.code != 401) return response
-            response.close()
-            val challenge = response.header("WWW-Authenticate") ?: return response
-            if (!challenge.startsWith("Bearer")) {
-                // Basic challenge:直接带 Basic 重试一次
-                val cred = request.tag(Credential::class.java)
-                if (cred != null) {
-                    return chain.proceed(request.newBuilder().header("Authorization", basicAuth(cred)).build())
-                }
-                return response
-            }
-            val token = fetchToken(challenge, request.tag(Credential::class.java)) ?: return response
-            tokenCache.put(key, token, null)
-            return chain.proceed(request.newBuilder().header("Authorization", "Bearer $token").build())
         }
     }
 

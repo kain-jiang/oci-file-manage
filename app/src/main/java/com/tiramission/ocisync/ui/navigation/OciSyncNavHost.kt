@@ -1,21 +1,38 @@
 package com.tiramission.ocisync.ui.navigation
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.DateRange
+import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Inventory
 import androidx.compose.material.icons.filled.List
 import androidx.compose.material3.Icon
-import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -59,11 +76,11 @@ private data class BottomTab(
 
 private val bottomTabs = listOf(
     BottomTab(Routes.HOME, R.string.tab_home, Icons.Filled.Home),
-    BottomTab(Routes.BROWSE, R.string.tab_browse, Icons.Filled.List),
-    BottomTab(Routes.HISTORY, R.string.tab_history, Icons.Filled.DateRange),
+    BottomTab(Routes.BROWSE, R.string.tab_browse, Icons.Filled.Inventory),
+    BottomTab(Routes.HISTORY, R.string.tab_history, Icons.Filled.History),
 )
 
-/** 应用根:底部导航贯穿全部页面 + NavHost。 */
+/** 应用根:底部导航(64dp,设计稿 首页.html nav)+ NavHost。 */
 @Composable
 fun OciSyncAppRoot() {
     val navController = rememberNavController()
@@ -71,29 +88,23 @@ fun OciSyncAppRoot() {
     val currentRoute = backStackEntry?.destination?.route
 
     Scaffold(
-        // 外层只负责底部导航,不处理系统栏 inset(各页面 Scaffold/TopAppBar 自行消费)
+        // 不消费系统栏 inset,让各页面根元素自行处理
         contentWindowInsets = WindowInsets(0, 0, 0, 0),
+        containerColor = MaterialTheme.colorScheme.background,
         bottomBar = {
-            // 设计稿:全部页面均保留底部三 Tab
-            NavigationBar {
-                bottomTabs.forEach { tab ->
-                    val selected = currentRoute == tab.route
-                    NavigationBarItem(
-                        selected = selected,
-                        onClick = {
-                            navController.navigate(tab.route) {
-                                popUpTo(navController.graph.findStartDestination().id) {
-                                    saveState = true
-                                }
-                                launchSingleTop = true
-                                restoreState = true
-                            }
-                        },
-                        icon = { Icon(tab.icon, contentDescription = null) },
-                        label = { Text(stringResource(tab.labelRes)) },
-                    )
-                }
-            }
+            BottomNavBar(
+                tabs = bottomTabs,
+                currentRoute = currentRoute,
+                onTabClick = { route ->
+                    navController.navigate(route) {
+                        popUpTo(navController.graph.findStartDestination().id) {
+                            saveState = true
+                        }
+                        launchSingleTop = true
+                        restoreState = true
+                    }
+                },
+            )
         },
     ) { innerPadding ->
         NavHost(
@@ -162,6 +173,57 @@ fun OciSyncAppRoot() {
             }
             composable(Routes.SETTINGS) {
                 SettingsScreen(onBack = { navController.popBackStack() })
+            }
+        }
+    }
+}
+
+/** 底部导航(设计稿 首页.html nav):64dp 高,选中=主色 + 中等字重,未选=次要色。 */
+@Composable
+private fun BottomNavBar(
+    tabs: List<BottomTab>,
+    currentRoute: String?,
+    onTabClick: (String) -> Unit,
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(64.dp)
+            .background(MaterialTheme.colorScheme.surface)
+            .border(
+                width = 1.dp,
+                color = MaterialTheme.colorScheme.outline,
+                shape = RectangleShape,
+            ),
+    ) {
+        tabs.forEach { tab ->
+            val selected = currentRoute == tab.route
+            val contentColor = if (selected) MaterialTheme.colorScheme.primary
+            else MaterialTheme.colorScheme.onSurfaceVariant
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxSize()
+                    .clickable(
+                        onClick = { onTabClick(tab.route) },
+                        indication = ripple(),
+                        interactionSource = remember { MutableInteractionSource() },
+                    ),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center,
+            ) {
+                Icon(
+                    imageVector = tab.icon,
+                    contentDescription = null,
+                    tint = contentColor,
+                    modifier = Modifier.size(22.dp),
+                )
+                Text(
+                    text = stringResource(tab.labelRes),
+                    style = MaterialTheme.typography.labelSmall,
+                    color = contentColor,
+                    modifier = Modifier.padding(top = 2.dp),
+                )
             }
         }
     }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- 应用 -->
-    <string name="app_name">OCI File Manage</string>
+    <string name="app_name">OCI Sync</string>
 
     <!-- 底部导航 -->
     <string name="tab_home">首页</string>
@@ -14,6 +14,7 @@
     <string name="home_no_shortcuts">还没有快捷仓库,去设置页添加常用仓库,一键推送/拉取。</string>
     <string name="home_push">推送文件</string>
     <string name="home_pull">拉取文件</string>
+    <string name="home_quick_actions">快速操作</string>
     <string name="home_settings">设置</string>
 
     <!-- 设置 -->
@@ -76,18 +77,24 @@
 
     <!-- M6:push/pull/list/notif -->
     <string name="shortcut_push_new">推送新版本</string>
+    <string name="shortcut_title">快捷仓库</string>
+    <string name="shortcut_tags_title">TAG 列表</string>
     <string name="home_push_coming_soon">推送功能开发中,敬请期待</string>
     <string name="home_pull_coming_soon">拉取功能开发中,敬请期待</string>
     <string name="settings_shortcut_added">快捷仓库已添加</string>
     <string name="push_title">推送文件</string>
+    <string name="push_local_path">本地路径</string>
     <string name="push_select_file">选择文件</string>
     <string name="push_select_dir">选择目录</string>
+    <string name="push_select_file_dir">选择文件/目录</string>
     <string name="push_selected">已选择:%1$s</string>
     <string name="push_ref_hint">远程仓库,如 registry.example.com/myteam/files:latest</string>
     <string name="push_passphrase">加密口令(可选)</string>
+    <string name="push_labels">标签</string>
     <string name="push_label_key">标签 key</string>
     <string name="push_label_value">value</string>
     <string name="push_add_label">添加标签</string>
+    <string name="push_start">开始推送</string>
     <string name="push_execute">推送</string>
     <string name="push_cancel">取消</string>
     <string name="push_bg_started">大文件已转入后台任务,可在通知栏查看进度</string>
@@ -102,12 +109,17 @@
     <string name="notif_done">%1$s完成</string>
     <string name="notif_push_done">推送完成</string>
     <string name="pull_title">拉取文件</string>
+    <string name="pull_ref_title">仓库引用</string>
     <string name="pull_ref_hint">远程仓库引用,如 registry.example.com/myteam/files:latest</string>
-    <string name="pull_select_dest">选择目标目录</string>
+    <string name="pull_dest_title">目标目录</string>
+    <string name="pull_select_dest">选择目录</string>
     <string name="pull_dest_selected">目标:%1$s</string>
     <string name="pull_passphrase">解密口令(加密内容必填)</string>
+    <string name="pull_passphrase_hint">若 artifact 已加密且未填写口令,将在检测后提示。</string>
+    <string name="pull_start">开始拉取</string>
     <string name="pull_execute">拉取</string>
     <string name="pull_bg_started">拉取已转入后台任务,可在通知栏查看进度</string>
+    <string name="progress_waiting">等待开始</string>
     <string name="stage_packing">打包中…</string>
     <string name="stage_encrypting">加密中…</string>
     <string name="stage_uploading">上传中…</string>
