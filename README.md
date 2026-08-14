@@ -53,9 +53,6 @@ Android 客户端,将本地文件/目录同步到 OCI 兼容镜像仓库。这�
 ./gradlew test                   # 运行单元测试
 ./gradlew connectedDebugAndroidTest  # 运行仪器测试(需设备/模拟器)
 
-# 3.7G 小内存机器(本地开发机):用脚本自动规避 dex 阶段 OOM
-./scripts/build-apk.sh
-
 # 互操作样本复现 + Android 端互操作测试(需 Go)
 ./scripts/interop.sh
 ```
