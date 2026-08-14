@@ -90,6 +90,17 @@ class ConfigLoader(
         return Result.success(Unit)
     }
 
+    /** 编辑 shortcut(校验同 add;名称不存在则失败)。 */
+    fun updateShortcut(name: String, repo: String): Result<Unit> {
+        if (!load().shortcuts.containsKey(name)) {
+            return Result.failure(IllegalArgumentException("shortcut not found: $name"))
+        }
+        validateRepo(repo).getOrElse { return Result.failure(it) }
+        val config = load()
+        save(config.copy(shortcuts = config.shortcuts + (name to Shortcut(repo))))
+        return Result.success(Unit)
+    }
+
     fun removeShortcut(name: String) {
         val config = load()
         save(config.copy(shortcuts = config.shortcuts - name))
