@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="zh" class="light" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>仓库</title>
+    <style id="theme-vars">
+/* OCI Sync Android — Material 3 brand tokens */
+
+:root {
+  /* Primary hue: indigo 600 base */
+  --oci-primary-50: #eef2ff;
+  --oci-primary-100: #e0e7ff;
+  --oci-primary-200: #c7d2fe;
+  --oci-primary-300: #a5b4fc;
+  --oci-primary-400: #818cf8;
+  --oci-primary-500: #6366f1;
+  --oci-primary-600: #4f46e5;
+  --oci-primary-700: #4338ca;
+  --oci-primary-800: #3730a3;
+  --oci-primary-900: #312e81;
+
+  /* Neutral scale */
+  --oci-neutral-0: #ffffff;
+  --oci-neutral-50: #f8fafc;
+  --oci-neutral-100: #f1f5f9;
+  --oci-neutral-200: #e2e8f0;
+  --oci-neutral-300: #cbd5e1;
+  --oci-neutral-400: #94a3b8;
+  --oci-neutral-500: #64748b;
+  --oci-neutral-600: #475569;
+  --oci-neutral-700: #334155;
+  --oci-neutral-800: #1e293b;
+  --oci-neutral-900: #0f172a;
+  --oci-neutral-950: #020617;
+
+  /* State colors */
+  --oci-state-success: #16a34a;
+  --oci-state-success-bg: #dcfce7;
+  --oci-state-warning: #ca8a04;
+  --oci-state-warning-bg: #fef9c3;
+  --oci-state-error: #dc2626;
+  --oci-state-error-bg: #fee2e2;
+  --oci-state-info: #2563eb;
+  --oci-state-info-bg: #dbeafe;
+
+  /* Radius */
+  --oci-radius-small: 4px;
+  --oci-radius-medium: 8px;
+  --oci-radius-large: 16px;
+  --oci-radius-full: 9999px;
+
+  /* Shadows */
+  --oci-shadow-1: 0 1px 2px 0 rgba(15, 23, 42, 0.05), 0 1px 1px 0 rgba(15, 23, 42, 0.03);
+  --oci-shadow-2: 0 8px 24px -8px rgba(15, 23, 42, 0.05);
+  --oci-shadow-3: 0 24px 60px -20px rgba(15, 23, 42, 0.05);
+
+  /* Typography */
+  --oci-font-sans: 'Inter', 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  --oci-font-mono: 'JetBrains Mono', 'SF Mono', ui-monospace, monospace;
+
+  /* Spacing */
+  --oci-s-1: 4px;
+  --oci-s-2: 8px;
+  --oci-s-3: 12px;
+  --oci-s-4: 16px;
+  --oci-s-5: 24px;
+  --oci-s-6: 32px;
+
+  /* Semantic aliases — light mode defaults */
+  --oci-background: #f8fafc;
+  --oci-foreground: #0f172a;
+  --oci-card: #ffffff;
+  --oci-card-foreground: #0f172a;
+  --oci-popover: #ffffff;
+  --oci-popover-foreground: #0f172a;
+  --oci-primary: #4f46e5;
+  --oci-primary-foreground: #ffffff;
+  --oci-muted: #f1f5f9;
+  --oci-muted-foreground: #64748b;
+  --oci-border: #e2e8f0;
+  --oci-input: #e2e8f0;
+  --oci-ring: #4f46e5;
+  --oci-surface: #ffffff;
+  --oci-surface-2: #f8fafc;
+  --oci-ink: #0f172a;
+  --oci-ink-2: #475569;
+  --oci-ink-3: #64748b;
+  --oci-line: #e2e8f0;
+}
+
+html.light {
+  --oci-background: #f8fafc;
+  --oci-foreground: #0f172a;
+  --oci-card: #ffffff;
+  --oci-card-foreground: #0f172a;
+  --oci-popover: #ffffff;
+  --oci-popover-foreground: #0f172a;
+  --oci-primary: #4f46e5;
+  --oci-primary-foreground: #ffffff;
+  --oci-muted: #f1f5f9;
+  --oci-muted-foreground: #64748b;
+  --oci-border: #e2e8f0;
+  --oci-input: #e2e8f0;
+  --oci-ring: #4f46e5;
+  --oci-surface: #ffffff;
+  --oci-surface-2: #f8fafc;
+  --oci-ink: #0f172a;
+  --oci-ink-2: #475569;
+  --oci-ink-3: #64748b;
+  --oci-line: #e2e8f0;
+}
+
+html.dark {
+  --oci-background: #0b0b0f;
+  --oci-foreground: #f8fafc;
+  --oci-card: #14141a;
+  --oci-card-foreground: #f8fafc;
+  --oci-popover: #1c1c24;
+  --oci-popover-foreground: #f8fafc;
+  --oci-primary: #818cf8;
+  --oci-primary-foreground: #0f172a;
+  --oci-muted: #1c1c24;
+  --oci-muted-foreground: #94a3b8;
+  --oci-border: #27272f;
+  --oci-input: #27272f;
+  --oci-ring: #818cf8;
+  --oci-surface: #14141a;
+  --oci-surface-2: #1c1c24;
+  --oci-ink: #f8fafc;
+  --oci-ink-2: #cbd5e1;
+  --oci-ink-3: #94a3b8;
+  --oci-line: #27272f;
+}
+
+/* Semantic aliases required by head contract */
+:root {
+  --oci-primary-50-alias: var(--oci-primary-50);
+  --oci-primary-100-alias: var(--oci-primary-100);
+  --oci-primary-900-alias: var(--oci-primary-900);
+}
+
+/* Utility classes */
+.font-sans { font-family: var(--oci-font-sans); }
+.font-mono { font-family: var(--oci-font-mono); }
+
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4.3.1/dist/index.global.js"></script>
+    <script src="https://unpkg.com/lucide@1.8.0/dist/umd/lucide.min.js"></script>
+    <style type="text/tailwindcss">
+  @theme inline {
+    --color-background: var(--oci-background);
+    --color-foreground: var(--oci-foreground);
+    --color-card: var(--oci-card);
+    --color-card-foreground: var(--oci-card-foreground);
+    --color-popover: var(--oci-popover);
+    --color-popover-foreground: var(--oci-popover-foreground);
+    --color-primary: var(--oci-primary);
+    --color-primary-foreground: var(--oci-primary-foreground);
+    --color-muted: var(--oci-muted);
+    --color-muted-foreground: var(--oci-muted-foreground);
+    --color-border: var(--oci-border);
+    --color-input: var(--oci-input);
+    --color-ring: var(--oci-ring);
+    --radius-sm: var(--oci-radius-small);
+    --radius-md: var(--oci-radius-medium);
+    --radius-lg: var(--oci-radius-large);
+  }
+  @layer base {
+    body { background: var(--oci-background); color: var(--oci-foreground); }
+    td, th { @apply break-words; word-break: break-all; word-break: auto-phrase; }
+    th { @apply whitespace-nowrap; }
+  }
+    </style>
+    <style id="semantic-token-fallback">
+      .bg-background { background-color: var(--oci-background); }
+      .text-background { color: var(--oci-background); }
+      .border-background { border-color: var(--oci-background); }
+      .ring-background { --tw-ring-color: var(--oci-background); }
+      .bg-foreground { background-color: var(--oci-foreground); }
+      .text-foreground { color: var(--oci-foreground); }
+      .border-foreground { border-color: var(--oci-foreground); }
+      .ring-foreground { --tw-ring-color: var(--oci-foreground); }
+      .bg-card { background-color: var(--oci-card); }
+      .text-card { color: var(--oci-card); }
+      .border-card { border-color: var(--oci-card); }
+      .ring-card { --tw-ring-color: var(--oci-card); }
+      .bg-card-foreground { background-color: var(--oci-card-foreground); }
+      .text-card-foreground { color: var(--oci-card-foreground); }
+      .border-card-foreground { border-color: var(--oci-card-foreground); }
+      .ring-card-foreground { --tw-ring-color: var(--oci-card-foreground); }
+      .bg-popover { background-color: var(--oci-popover); }
+      .text-popover { color: var(--oci-popover); }
+      .border-popover { border-color: var(--oci-popover); }
+      .ring-popover { --tw-ring-color: var(--oci-popover); }
+      .bg-popover-foreground { background-color: var(--oci-popover-foreground); }
+      .text-popover-foreground { color: var(--oci-popover-foreground); }
+      .border-popover-foreground { border-color: var(--oci-popover-foreground); }
+      .ring-popover-foreground { --tw-ring-color: var(--oci-popover-foreground); }
+      .bg-primary { background-color: var(--oci-primary); }
+      .text-primary { color: var(--oci-primary); }
+      .border-primary { border-color: var(--oci-primary); }
+      .ring-primary { --tw-ring-color: var(--oci-primary); }
+      .bg-primary-foreground { background-color: var(--oci-primary-foreground); }
+      .text-primary-foreground { color: var(--oci-primary-foreground); }
+      .border-primary-foreground { border-color: var(--oci-primary-foreground); }
+      .ring-primary-foreground { --tw-ring-color: var(--oci-primary-foreground); }
+      .bg-muted { background-color: var(--oci-muted); }
+      .text-muted { color: var(--oci-muted); }
+      .border-muted { border-color: var(--oci-muted); }
+      .ring-muted { --tw-ring-color: var(--oci-muted); }
+      .bg-muted-foreground { background-color: var(--oci-muted-foreground); }
+      .text-muted-foreground { color: var(--oci-muted-foreground); }
+      .border-muted-foreground { border-color: var(--oci-muted-foreground); }
+      .ring-muted-foreground { --tw-ring-color: var(--oci-muted-foreground); }
+      .bg-border { background-color: var(--oci-border); }
+      .text-border { color: var(--oci-border); }
+      .border-border { border-color: var(--oci-border); }
+      .ring-border { --tw-ring-color: var(--oci-border); }
+      .bg-input { background-color: var(--oci-input); }
+      .text-input { color: var(--oci-input); }
+      .border-input { border-color: var(--oci-input); }
+      .ring-input { --tw-ring-color: var(--oci-input); }
+      .bg-ring { background-color: var(--oci-ring); }
+      .text-ring { color: var(--oci-ring); }
+      .border-ring { border-color: var(--oci-ring); }
+      .ring-ring { --tw-ring-color: var(--oci-ring); }
+    </style>
+    <style>
+      .no-scrollbar::-webkit-scrollbar { display: none; }
+      .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+      [data-icon] {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        -webkit-mask-size: contain;
+        mask-size: contain;
+        -webkit-mask-repeat: no-repeat;
+        mask-repeat: no-repeat;
+        -webkit-mask-position: center;
+        mask-position: center;
+        background-color: currentColor;
+      }
+    </style>
+</head>
+<body class="min-h-screen font-sans antialiased bg-background text-foreground">
+    <main class="pb-28">
+      <!-- Header -->
+      <header class="sticky top-0 z-10 bg-surface px-4 py-4" style="background-color: var(--oci-surface);">
+        <h1 class="text-xl font-semibold" style="color: var(--oci-ink);">仓库浏览</h1>
+      </header>
+
+      <!-- Search bar -->
+      <section class="px-4 py-3">
+        <div class="flex items-center gap-2">
+          <div class="relative flex-1">
+            <i data-lucide="search" class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4" style="color: var(--oci-ink-3);"></i>
+            <input id="input-registry" type="text" placeholder="输入 registry 或 repo 引用" class="w-full pl-9 pr-3 py-2.5 bg-card border border-input rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-ring" style="color: var(--oci-ink);" />
+          </div>
+          <button id="btn-query" class="px-4 py-2.5 bg-primary text-primary-foreground rounded-lg text-sm font-medium shadow-sm whitespace-nowrap">查询</button>
+        </div>
+      </section>
+
+      <!-- Filter chips -->
+      <section class="px-4 pb-1">
+        <div class="flex gap-2 overflow-x-auto no-scrollbar">
+          <button class="px-3 py-1.5 rounded-full text-xs font-medium bg-primary text-primary-foreground shadow-sm">全部</button>
+          <button class="px-3 py-1.5 rounded-full text-xs font-medium bg-muted border border-border" style="color: var(--oci-ink-2);">app=myapp</button>
+          <button class="px-3 py-1.5 rounded-full text-xs font-medium bg-muted border border-border" style="color: var(--oci-ink-2);">env=prod</button>
+        </div>
+      </section>
+
+      <!-- Artifact list -->
+      <section class="px-4 py-3 space-y-3">
+        <!-- Item 1 -->
+        <article data-dom-id="artifact-1" class="bg-card rounded-2xl p-4 border border-border shadow-sm">
+          <div class="flex items-start justify-between gap-3">
+            <div class="flex items-start gap-3 min-w-0">
+              <div class="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" style="background-color: var(--oci-primary-50); color: var(--oci-primary);">
+                <i data-lucide="package" class="w-5 h-5"></i>
+              </div>
+              <div class="min-w-0">
+                <div class="flex items-center gap-1.5">
+                  <h3 class="font-semibold text-base truncate" style="color: var(--oci-ink);">work/files</h3>
+                  <i data-lucide="lock" class="w-3.5 h-3.5 shrink-0" style="color: var(--oci-ink-3);"></i>
+                </div>
+                <p class="text-xs mt-0.5" style="color: var(--oci-ink-3);">tag: v1.2</p>
+              </div>
+            </div>
+            <span class="px-2 py-0.5 rounded-full text-[10px] font-medium shrink-0" style="background-color: var(--oci-primary-50); color: var(--oci-primary);">app=myapp</span>
+          </div>
+          <div class="mt-3 flex items-center gap-4 text-xs" style="color: var(--oci-ink-2);">
+            <span class="flex items-center gap-1"><i data-lucide="hard-drive" class="w-3.5 h-3.5"></i>12.4 MB</span>
+            <span class="flex items-center gap-1"><i data-lucide="tag" class="w-3.5 h-3.5"></i>0.1.0</span>
+          </div>
+          <div class="mt-3 flex items-center gap-2 border-t border-border pt-3">
+            <button class="flex-1 py-2 rounded-lg text-xs font-medium bg-primary text-primary-foreground shadow-sm">拉取</button>
+            <button class="flex-1 py-2 rounded-lg text-xs font-medium bg-muted border border-border" style="color: var(--oci-ink-2);">删除</button>
+            <button class="flex-1 py-2 rounded-lg text-xs font-medium bg-muted border border-border" style="color: var(--oci-ink-2);">标签</button>
+          </div>
+        </article>
+
+        <!-- Item 2 -->
+        <article data-dom-id="artifact-2" class="bg-card rounded-2xl p-4 border border-border shadow-sm">
+          <div class="flex items-start justify-between gap-3">
+            <div class="flex items-start gap-3 min-w-0">
+              <div class="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" style="background-color: var(--oci-primary-50); color: var(--oci-primary);">
+                <i data-lucide="package" class="w-5 h-5"></i>
+              </div>
+              <div class="min-w-0">
+                <div class="flex items-center gap-1.5">
+                  <h3 class="font-semibold text-base truncate" style="color: var(--oci-ink);">personal/files</h3>
+                </div>
+                <p class="text-xs mt-0.5" style="color: var(--oci-ink-3);">tag: latest</p>
+              </div>
+            </div>
+            <span class="px-2 py-0.5 rounded-full text-[10px] font-medium shrink-0" style="background-color: var(--oci-primary-50); color: var(--oci-primary);">env=prod</span>
+          </div>
+          <div class="mt-3 flex items-center gap-4 text-xs" style="color: var(--oci-ink-2);">
+            <span class="flex items-center gap-1"><i data-lucide="hard-drive" class="w-3.5 h-3.5"></i>3.1 MB</span>
+            <span class="flex items-center gap-1"><i data-lucide="tag" class="w-3.5 h-3.5"></i>0.1.0</span>
+          </div>
+          <div class="mt-3 flex items-center gap-2 border-t border-border pt-3">
+            <button class="flex-1 py-2 rounded-lg text-xs font-medium bg-primary text-primary-foreground shadow-sm">拉取</button>
+            <button class="flex-1 py-2 rounded-lg text-xs font-medium bg-muted border border-border" style="color: var(--oci-ink-2);">删除</button>
+            <button class="flex-1 py-2 rounded-lg text-xs font-medium bg-muted border border-border" style="color: var(--oci-ink-2);">标签</button>
+          </div>
+        </article>
+
+        <!-- Item 3 -->
+        <article data-dom-id="artifact-3" class="bg-card rounded-2xl p-4 border border-border shadow-sm">
+          <div class="flex items-start justify-between gap-3">
+            <div class="flex items-start gap-3 min-w-0">
+              <div class="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" style="background-color: var(--oci-primary-50); color: var(--oci-primary);">
+                <i data-lucide="package" class="w-5 h-5"></i>
+              </div>
+              <div class="min-w-0">
+                <div class="flex items-center gap-1.5">
+                  <h3 class="font-semibold text-base truncate" style="color: var(--oci-ink);">shared/docs</h3>
+                  <i data-lucide="lock" class="w-3.5 h-3.5 shrink-0" style="color: var(--oci-ink-3);"></i>
+                </div>
+                <p class="text-xs mt-0.5" style="color: var(--oci-ink-3);">tag: v2</p>
+              </div>
+            </div>
+          </div>
+          <div class="mt-3 flex items-center gap-4 text-xs" style="color: var(--oci-ink-2);">
+            <span class="flex items-center gap-1"><i data-lucide="hard-drive" class="w-3.5 h-3.5"></i>256 KB</span>
+            <span class="flex items-center gap-1"><i data-lucide="tag" class="w-3.5 h-3.5"></i>0.1.0</span>
+          </div>
+          <div class="mt-3 flex items-center gap-2 border-t border-border pt-3">
+            <button class="flex-1 py-2 rounded-lg text-xs font-medium bg-primary text-primary-foreground shadow-sm">拉取</button>
+            <button class="flex-1 py-2 rounded-lg text-xs font-medium bg-muted border border-border" style="color: var(--oci-ink-2);">删除</button>
+            <button class="flex-1 py-2 rounded-lg text-xs font-medium bg-muted border border-border" style="color: var(--oci-ink-2);">标签</button>
+          </div>
+        </article>
+      </section>
+    
+
+</main>
+
+    <!-- Bottom navigation -->
+    
+
+    <script>lucide.createIcons();</script>
+    <nav data-mobile-nav="global" class="w-full border-t border-[var(--oci-line)] bg-[var(--oci-surface)]">
+  <div class="w-full max-w-md mx-auto grid grid-cols-3 h-[64px]">
+        <a href="home.html" data-nav-key="home" data-dom-id="nav-home" class="min-w-0 flex flex-col items-center justify-center gap-0.5 px-1 h-full text-[var(--oci-ink-3)]">
+          <i data-lucide="home" class="w-5 h-5 shrink-0"></i>
+          <span class="text-[11px] leading-none whitespace-nowrap max-w-full truncate">首页</span>
+        </a>
+        <a href="browse.html" data-nav-key="browse" data-dom-id="nav-browse" class="min-w-0 flex flex-col items-center justify-center gap-0.5 px-1 h-full text-[var(--oci-primary)] font-medium">
+          <i data-lucide="package" class="w-5 h-5 shrink-0"></i>
+          <span class="text-[11px] leading-none whitespace-nowrap max-w-full truncate">仓库</span>
+        </a>
+        <a href="history.html" data-nav-key="history" data-dom-id="nav-history" class="min-w-0 flex flex-col items-center justify-center gap-0.5 px-1 h-full text-[var(--oci-ink-3)]">
+          <i data-lucide="clock" class="w-5 h-5 shrink-0"></i>
+          <span class="text-[11px] leading-none whitespace-nowrap max-w-full truncate">历史</span>
+        </a>
+      </div>
+    </nav>
+
+    <script>lucide.createIcons();</script>
+</body>
+</html>
