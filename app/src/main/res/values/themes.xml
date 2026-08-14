@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- M0 脚手架用平台主题,避免额外主题依赖;UI 以 ui-design/ 设计稿为准(M5 落地) -->
+    <style name="Theme.OciSync" parent="android:Theme.Material.Light.NoActionBar" />
+</resources>
