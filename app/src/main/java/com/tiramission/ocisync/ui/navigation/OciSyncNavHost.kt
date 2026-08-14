@@ -17,14 +17,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.tiramission.ocisync.R
-import com.tiramission.ocisync.ui.browse.BrowseScreen
 import com.tiramission.ocisync.ui.history.HistoryScreen
 import com.tiramission.ocisync.ui.home.HomeScreen
+import com.tiramission.ocisync.ui.list.ListScreen
+import com.tiramission.ocisync.ui.pull.PullScreen
+import com.tiramission.ocisync.ui.push.PushScreen
 import com.tiramission.ocisync.ui.settings.SettingsScreen
 
 /** 路由定义。底部三 Tab(首页/仓库/历史)贯穿全部页面,子页保留返回键(ui-design/ 设计稿)。 */
@@ -102,10 +106,60 @@ fun OciSyncAppRoot() {
                     onOpenSettings = { navController.navigate(Routes.SETTINGS) },
                     onOpenPush = { navController.navigate(Routes.push()) },
                     onOpenPull = { navController.navigate(Routes.pull("")) },
+                    onOpenShortcut = { name, repo -> navController.navigate(Routes.shortcut(name, repo)) },
                 )
             }
-            composable(Routes.BROWSE) { BrowseScreen() }
+            composable(Routes.BROWSE) {
+                ListScreen(
+                    initialRef = null,
+                    onPullArtifact = { ref -> navController.navigate(Routes.pull(ref)) },
+                )
+            }
             composable(Routes.HISTORY) { HistoryScreen() }
+            composable(
+                route = Routes.PUSH,
+                arguments = listOf(navArgument(Routes.PUSH_ARG_REF) {
+                    type = NavType.StringType
+                    defaultValue = ""
+                }),
+            ) { entry ->
+                val initialRef = entry.arguments?.getString(Routes.PUSH_ARG_REF).orEmpty()
+                PushScreen(
+                    initialRef = initialRef,
+                    onBack = { navController.popBackStack() },
+                )
+            }
+            composable(
+                route = Routes.PULL,
+                arguments = listOf(navArgument(Routes.PULL_ARG_REF) {
+                    type = NavType.StringType
+                    defaultValue = ""
+                }),
+            ) { entry ->
+                val initialRef = entry.arguments?.getString(Routes.PULL_ARG_REF).orEmpty()
+                PullScreen(
+                    initialRef = initialRef,
+                    onBack = { navController.popBackStack() },
+                )
+            }
+            composable(
+                route = Routes.SHORTCUT,
+                arguments = listOf(
+                    navArgument(Routes.SHORTCUT_ARG_NAME) { type = NavType.StringType },
+                    navArgument(Routes.SHORTCUT_ARG_REPO) { type = NavType.StringType },
+                ),
+            ) { entry ->
+                val name = entry.arguments?.getString(Routes.SHORTCUT_ARG_NAME).orEmpty()
+                val repo = entry.arguments?.getString(Routes.SHORTCUT_ARG_REPO).orEmpty()
+                ShortcutDetailScreen(
+                    name = name,
+                    repo = repo,
+                    onBack = { navController.popBackStack() },
+                    onPullArtifact = { ref -> navController.navigate(Routes.pull(ref)) },
+                    onPushNew = { navController.navigate(Routes.push(repo)) },
+                    onEditShortcut = { navController.navigate(Routes.SETTINGS) },
+                )
+            }
             composable(Routes.SETTINGS) {
                 SettingsScreen(onBack = { navController.popBackStack() })
             }

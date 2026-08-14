@@ -14,7 +14,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.OciSync">
 
-        <!-- 大文件传输前台服务(M6 引入,SyncForegroundService) -->
+        <!-- 大文件传输前台服务(Android 14+ dataSync 类型) -->
+        <service
+            android:name=".service.SyncForegroundService"
+            android:exported="false"
+            android:foregroundServiceType="dataSync" />
+
         <activity
             android:name=".MainActivity"
             android:exported="true">
