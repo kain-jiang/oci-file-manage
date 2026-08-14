@@ -65,7 +65,7 @@ Android 客户端,将本地文件/目录同步到 OCI 兼容镜像仓库。这�
 ## 仓库
 
 - 上游(Go CLI):https://github.com/tiramission/oci-sync
-- 本仓库:https://github.com/kain-jiang/oci-file-manage(待创建)
+- 本仓库:https://github.com/kain-jiang/oci-file-manage
 
 ## 许可
 
